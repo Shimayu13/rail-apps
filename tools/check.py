@@ -54,7 +54,7 @@ for app in ('jre','yokohama'):
     for target in registry[app].values():assert target.startswith(config['origin']+base+'/')
 for path in OUT.rglob('*'):
     assert path.suffix not in ('.swift','.toml','.pem','.key'),f'Unexpected app/secret file: {path}'
-    if path.is_file():
+    if path.is_file() and path.suffix in ('.html','.css','.svg','.json','.txt','.xml'):
         text=path.read_text()
         assert not re.search(r'(?:gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN .*PRIVATE KEY|acl:consumerKey=|X-RapidAPI-Key)',text),f'Credential marker: {path}'
 print(f'PASS: {len(docs)} pages, {count} local links/assets/anchors, App Store URL registry, sitemap and publication scope.')

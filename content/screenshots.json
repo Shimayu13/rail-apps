@@ -1,0 +1,22 @@
+[
+  {
+    "file": "assets/jre-screen.png",
+    "screen": "山手線の列車位置",
+    "source": "Built application running in iPhone 18 Pro simulator",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "1839bf6ea29aaa5a51878934487a5c206324854636fcfc0ab5e4b6701bb2f886"
+  },
+  {
+    "file": "assets/yokohama-screen.png",
+    "screen": "横浜駅・ブルーライン湘南台方面の休日時刻表",
+    "source": "Built application running in iPhone 18 Pro simulator",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "a4facc71b07bc519be760878260adb81dc8fe6452ea9247a245469c96c00c017"
+  }
+]

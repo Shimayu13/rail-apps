@@ -36,23 +36,15 @@ APPS = {
 }
 
 def phone(color, mode='route'):
-    if mode == 'route':
-        stations = [('東京','Tokyo'),('有楽町','Yurakucho'),('新橋','Shimbashi'),('浜松町','Hamamatsucho')]
-        content = '<small>JREアプリ</small><h3>列車の位置</h3><div class="screen-label">山手線　外回り</div><div class="route-strip">'
-        for i,(ja,en) in enumerate(stations):
-            content += f'<div class="route-stop">{ja}<span>{en}</span>' + ('<span class="train-pill">列車</span>' if i==1 else '') + '</div>'
-        content += '</div>'
-    else:
-        content = '<small>横浜地下鉄アプリ</small><h3>横浜駅の発車時刻</h3><div class="screen-label">ブルーライン　湘南台方面</div>'
-        for time,kind in [('12:04','普通'),('12:11','普通'),('12:18','快速'),('12:25','普通')]:
-            content += f'<div class="departure"><b>{time}</b><span><em>{kind}</em><br>湘南台</span><small>発車</small></div>'
-    return f'<div class="phone {color}" aria-hidden="true"><div class="screen">{content}</div></div>'
+    key = 'jre' if color == 'green' else 'yokohama'
+    app = APPS[key]
+    return f'<div class="phone real-screen {color}"><img src="{url("assets/"+key+"-screen.png")}" alt="{app["name"]}の実際のアプリ画面" width="1206" height="2622" decoding="async"></div>'
 
 def visual(key=None):
     phones = phone('green') + phone('blue','timetable') if key is None else phone(APPS[key]['color'], 'route' if key=='jre' else 'timetable')
-    return f'<div class="product-visual" role="img" aria-label="列車位置と発車時刻を表す説明用イメージ">{phones}</div>'
+    return f'<div class="product-visual" >{phones}</div>'
 
-NOTE = '<p class="illustration-note">機能を説明するイメージです。実際のアプリ画面・列車位置・発車時刻とは異なります。</p>'
+NOTE = '<p class="illustration-note">掲載画面はシミュレータで撮影した開発版です。表示内容は撮影時点のもので、公開版とは異なる場合があります。</p>'
 
 def localnav(key, current):
     app=APPS[key]
@@ -117,7 +109,8 @@ body=f'''<article class="document"><p class="eyebrow">Shimayu Apps</p><h1>本サ
 urls.append(page('privacy/','本サイトのプライバシー','Shimayu AppsのWebサイトのプライバシーに関する説明。',body))
 page('404.html','ページが見つかりません','お探しのページは見つかりませんでした。','<section class="error-page"><p class="eyebrow">お探しのページが見つかりません</p><h1>次の目的地へ。</h1><p>URLが変更されたか、ページが存在しない可能性があります。</p>'+link('','トップページへ','button')+'</section>',noindex=True)
 (OUT/'assets').mkdir(exist_ok=True)
-shutil.copyfile(ROOT/'assets/site.css',OUT/'assets/site.css')
+for asset in (ROOT/'assets').iterdir():
+    if asset.is_file(): shutil.copyfile(asset, OUT/'assets'/asset.name)
 (OUT/'assets/favicon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#1d1d1f"/><path d="M42 20H27c-10 0-10 12 0 12h10c10 0 10 12 0 12H22" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/></svg>')
 (OUT/'.nojekyll').touch()
 (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+CONFIG['origin']+url('sitemap.xml')+'\n')
