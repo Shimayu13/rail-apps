@@ -1,0 +1,27 @@
+name: アプリのお問い合わせ
+description: 不具合の報告・機能のご要望・使い方について
+body:
+  - type: markdown
+    attributes:
+      value: "投稿は公開されます。氏名、メールアドレス、現在地、APIキーなどの個人情報・機密情報を含めないでください。"
+  - type: dropdown
+    id: app
+    attributes:
+      label: アプリ
+      options:
+        - JREアプリ
+        - 横浜地下鉄アプリ
+        - Webサイト
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: お問い合わせ内容
+      description: 操作手順、期待した動作、実際の動作などをお知らせください。
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: アプリ・端末・OSのバージョン
