@@ -18,5 +18,242 @@
     "height": 2622,
     "image_edited": false,
     "sha256": "a4facc71b07bc519be760878260adb81dc8fe6452ea9247a245469c96c00c017"
+  },
+  {
+    "file": "assets/jre-share.png",
+    "screen": "JREアプリ・乗車位置を共有",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "e649e3c90357918a71d4088042b8415fa497a4b74423e87ebd2710ea693520eb"
+  },
+  {
+    "file": "assets/jre-detail.png",
+    "screen": "JREアプリ・列車詳細",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "a6da4c37ba38d9123751f783bc44866325217b906933a0d5db3d5715ab5c0cef"
+  },
+  {
+    "file": "assets/yokohama-home.png",
+    "screen": "横浜地下鉄アプリ・運行情報と発車標",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "57c29b05ccba9e0c458bb5a078a1ae350a678997690ea2f05ea74fde179637b7"
+  },
+  {
+    "file": "assets/yokohama-route.png",
+    "screen": "横浜地下鉄アプリ・列車位置",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "ccc7f9c49992a2240bee1b036e45d84d27f909430fa199234ae59ad80281a779"
+  },
+  {
+    "file": "assets/jre-home.png",
+    "screen": "JREアプリ・横浜駅の発車標",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "852a28e8c90c1937be73fdaced57f1169cfdc4144304a773bdff9b844b6e7288"
+  },
+  {
+    "file": "assets/jre-share-light.png",
+    "screen": "JREアプリ・乗車位置を共有",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "0d3b9c22cb986b16b839b1995d7fc55c1ee0c59e634fcf00dcaa3e1c4f910882"
+  },
+  {
+    "file": "assets/jre-share-dark.png",
+    "screen": "JREアプリ・乗車位置を共有",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "a516d9203e8ac51eeb66a07ee76d9ba9e58d714bf039cdd676edccda4eb4afdd"
+  },
+  {
+    "file": "assets/jre-detail-light.png",
+    "screen": "JREアプリ・列車詳細",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "9e5b7e7d94c4714a2639b71263e09f0d00ba2957334a141ef4225ec7e274ccca"
+  },
+  {
+    "file": "assets/jre-detail-dark.png",
+    "screen": "JREアプリ・列車詳細",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "ab9f7486fc6939d39016ab0744bbc4d0129ccecb26815bd23e976f41ab0572ad"
+  },
+  {
+    "file": "assets/jre-route-dark.png",
+    "screen": "JREアプリ・山手線の列車位置",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "cc4bc0634c39b05d54dfeea579d3d8b3d47fb6e3003c2a8c78de63ea3ce39d77"
+  },
+  {
+    "file": "assets/jre-home-dark.png",
+    "screen": "JREアプリ・横浜駅の発車標",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "ebb50f726a5915231d1352406078f59bbea9dcb1877bbd99fd8ee9f6f2fdab20"
+  },
+  {
+    "file": "assets/jre-home-light.png",
+    "screen": "JREアプリ・横浜駅の発車標",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "4ff3aefd501de1e496dd888315baa0b00882077b1f99bcaa133421343261206a"
+  },
+  {
+    "file": "assets/jre-timetable-light.png",
+    "screen": "JREアプリ・山手線の駅時刻表",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "e4e65454b80bdff1c58d42e4d8f3ee4f14a195015899c5d79a7580e059788ffc"
+  },
+  {
+    "file": "assets/jre-timetable-dark.png",
+    "screen": "JREアプリ・山手線の駅時刻表",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "0db4c5d971e8591accdd2c2b630609a3b523deb2f1b84eb4324dca995f82c114"
+  },
+  {
+    "file": "assets/yokohama-route-dark.png",
+    "screen": "横浜地下鉄アプリ・ブルーラインの列車位置",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "7b8ff21f44b62df2ce9489ceaa5c4b993a88007ac76370ffa37c6dcd89741914"
+  },
+  {
+    "file": "assets/yokohama-route-light.png",
+    "screen": "横浜地下鉄アプリ・ブルーラインの列車位置",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "92bea0e1455a33d570d42aa68ef3ccd236a9b20964707e9b0a35a79f4eec3115"
+  },
+  {
+    "file": "assets/yokohama-detail-light.png",
+    "screen": "横浜地下鉄アプリ・列車詳細",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "f24c324377b134dd82e94ece5c53c6fa4f27bbb169714c6518345e2c33afec99"
+  },
+  {
+    "file": "assets/yokohama-detail-dark.png",
+    "screen": "横浜地下鉄アプリ・列車詳細",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "7795a65c405d5f28e4a93d7da3a0225e26490ab641c16a8b7bf1cf2023ddebf7"
+  },
+  {
+    "file": "assets/yokohama-home-dark.png",
+    "screen": "横浜地下鉄アプリ・戸塚駅の発車標",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "e58d73666e8f1cf17604c4d48abcc8a69f4d9bc27b05584fe75d699f22c9aa76"
+  },
+  {
+    "file": "assets/yokohama-home-light.png",
+    "screen": "横浜地下鉄アプリ・戸塚駅の発車標",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "49783966657503f8995c0e7bb86389efb27ad2dff3c107aa2155af34c6c8394e"
+  },
+  {
+    "file": "assets/yokohama-timetable-light.png",
+    "screen": "横浜地下鉄アプリ・戸塚駅の時刻表",
+    "appearance": "light",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "0a516eb3a1804f07e6c38e883e4bc0cb2c124e5d63b03a20b7ba13993f2b3843"
+  },
+  {
+    "file": "assets/yokohama-timetable-dark.png",
+    "screen": "横浜地下鉄アプリ・戸塚駅の時刻表",
+    "appearance": "dark",
+    "source": "User-provided application screenshot",
+    "captured_date": "2026-11-15",
+    "width": 1206,
+    "height": 2622,
+    "image_edited": false,
+    "sha256": "2ad8a0461d47f8bb732449f1d6c51efd3f6e9174b2bb02c1f217e46ba71e339c"
   }
 ]

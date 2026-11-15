@@ -1,0 +1,18 @@
+[
+  {
+    "file": "assets/jre-icon.png",
+    "source_document": "JRE_app/JRE-app.icon",
+    "export_tool": "Apple Icon Composer ictool --export-image",
+    "platform": "iOS",
+    "rendition": "Default",
+    "sha256": "57a370cb122b77634e206bfb4770ecd251fe267f8e6a8cb6335416f63fbaec88"
+  },
+  {
+    "file": "assets/yokohama-icon.png",
+    "source_document": "Yokohama_subway_app/YokohamaApp.icon",
+    "export_tool": "Apple Icon Composer ictool --export-image",
+    "platform": "iOS",
+    "rendition": "Default",
+    "sha256": "5815e0fc22b7b1bccd5c844d6da5f2998d0de986dd1f11668ac2e790238d7101"
+  }
+]

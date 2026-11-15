@@ -35,16 +35,56 @@ APPS = {
  'yokohama': {'name':'横浜地下鉄アプリ','short':'横浜地下鉄','color':'blue','headline':'横浜の地下鉄を、<br>もっと軽やかに。','intro':'ブルーラインも、グリーンラインも。<br>列車位置と発車時刻を、すっきり確認。','description':'横浜市営地下鉄のブルーライン・グリーンラインの列車位置、運行情報、時刻表を確認できる、Shimayu開発の非公式アプリです。','section':'横浜を走る、<br>2つの路線と。','body':'ブルーラインとグリーンラインの列車位置、運行情報、駅の時刻表を確認。iPhone、Apple Watch、ウィジェットで、日々の移動をサポートします。','features':[('ブルーも、グリーンも。','横浜市営地下鉄のブルーライン・グリーンラインに対応。列車がどの駅の間を走っているか、路線上で確認できます。'),('最寄駅の、次の電車。','位置情報を許可すると、近くの駅を探せます。駅の時刻表や運行情報を確認し、お出かけ前の準備に。'),('手元でも、ホーム画面でも。','Apple Watchで情報を確認。ウィジェットには、iPhoneアプリで保存された駅の発車標を表示できます。')],'coverage':['ブルーライン','グリーンライン'],'coverage_note':'横浜市営地下鉄向けのアプリです。横浜市内を走るすべての鉄道に対応するものではありません。ウィジェットは保存済みの情報を利用するため、アプリ本体と表示の更新時刻が異なる場合があります。'}
 }
 
-def phone(color, mode='route'):
+SCREENSHOTS = {Path(item['file']).name: item for item in json.loads((ROOT/'content/screenshots.json').read_text())}
+
+APPEARANCES = json.loads((ROOT/'content/appearances.json').read_text())
+
+def phone(color, mode='route', asset=None, linked=False):
     key = 'jre' if color == 'green' else 'yokohama'
-    app = APPS[key]
-    return f'<div class="phone real-screen {color}"><img src="{url("assets/"+key+"-screen.png")}" alt="{app["name"]}の実際のアプリ画面" width="1206" height="2622" decoding="async"></div>'
+    asset = asset or key+'-home.png'
+    modes = APPEARANCES[asset]
+    shot = SCREENSHOTS[modes['light']]
+    image = f'<picture><source media="(prefers-color-scheme: dark)" srcset="{url("assets/"+modes["dark"])}"><img src="{url("assets/"+modes["light"])}" alt="{E(shot["screen"])}の実際のアプリ画面" width="{shot["width"]}" height="{shot["height"]}" decoding="async"></picture>'
+    zoom = ''
+    if linked:
+        for appearance, filename in modes.items():
+            label = 'ライト' if appearance == 'light' else 'ダーク'
+            zoom += f'<a class="screen-zoom mode-{appearance}" href="{url("assets/"+filename)}" aria-label="{E(shot["screen"])}の{label}画面を拡大する"></a>'
+    return f'<div class="phone real-screen {color}">{image}{zoom}<span class="dynamic-island" aria-hidden="true"><i></i></span></div>'
 
-def visual(key=None):
-    phones = phone('green') + phone('blue','timetable') if key is None else phone(APPS[key]['color'], 'route' if key=='jre' else 'timetable')
-    return f'<div class="product-visual" >{phones}</div>'
+def visual(key=None, compact=False):
+    if key is None:
+        phones = phone('green') + phone('blue')
+    elif compact:
+        phones = phone(APPS[key]['color'])
+    elif key == 'jre':
+        phones = phone('green', asset='jre-screen.png') + phone('green', asset='jre-detail.png')
+    else:
+        phones = phone('blue', asset='yokohama-route.png') + phone('blue', asset='yokohama-home.png')
+    return f'<div class="product-visual {"compact-stage" if compact else "duo-stage"}">{phones}</div>'
 
-NOTE = '<p class="illustration-note">掲載画面はシミュレータで撮影した開発版です。表示内容は撮影時点のもので、公開版とは異なる場合があります。</p>'
+NOTE = '<p class="illustration-note">掲載画面は実機・シミュレータで撮影したアプリの画面です。表示内容は撮影時点のもので、公開版とは異なる場合があります。</p>'
+
+def highlight_cards():
+    highlights = [
+        ('jre/#departures', '発車前に。', '次の電車を、ひと目で。', 'jre-home.png', 'green', '時刻・行き先・運行情報を一緒に確認。'),
+        ('yokohama/#positions', '乗る前に。', '列車のいまが、見える。', 'yokohama-route.png', 'blue', '駅と駅の間を走る列車を路線上で。'),
+        ('jre/#sharing', '待ち合わせに。', '何号車にいるか、伝わる。', 'jre-share.png', 'green', '乗車位置を選んで、共有の準備を。'),
+    ]
+    cards = ''
+    for target, label, title, asset, color, desc in highlights:
+        cards += f'<article class="highlight-card"><div class="highlight-copy"><p class="eyebrow">{label}</p><h3>{title}</h3><p>{desc}</p>{link(target,"機能を見る","text-link")}</div><div class="highlight-art">{phone(color, asset=asset)}</div></article>'
+    return '<section class="highlights" aria-labelledby="highlights-heading"><div class="wrap"><h2 id="highlights-heading" class="section-heading">移動の前も。<br>乗車中も。</h2><p class="section-subtitle">知りたいことが、画面を見ればわかる。</p></div><div class="feature-track">'+cards+'</div></section>'
+
+def story(id, label, title, text, color, assets, dark=False, reverse=False, caption=''):
+    stage = ''.join(phone(color, asset=asset, linked=True) for asset in assets)
+    style = (' story-dark' if dark else '') + (' story-reverse' if reverse else '') + (' story-pair' if len(assets)>1 else '')
+    return f'<section id="{id}" class="story{style}"><div class="story-inner"><div class="story-copy"><p class="eyebrow">{label}</p><h2>{title}</h2><p>{text}</p><p class="screen-hint">画面をタップすると拡大できます。</p></div><div class="story-art">{stage}<p class="story-caption">{caption}</p></div></div></section>'
+
+def feature_stories(key):
+    if key == 'jre':
+        return story('positions','列車位置','列車のいまを、<br>ひと目で。','駅名と列車の位置を路線上に表示。走行中か、駅に停車しているかも確認できます。気になる列車を選ぶと、その列車の詳しい情報へ。','green',['jre-screen.png'],caption='山手線の列車位置') + story('departures','発車標・運行情報','次の発車も。<br>運行の変化も。','駅の発車標では、行き先や発車時刻、提供される遅延情報をまとめて確認。移動前に確かめたい情報を、ひとつの画面に。','green',['jre-home.png'],reverse=True,caption='横浜駅の発車標と運行情報') + story('timetables','駅の時刻表','少し先の予定も、<br>時刻表で。','平日・休日を切り替えて、駅の時刻表を確認。発車したい時間帯から電車を探せます。','green',['jre-timetable.png'],caption='山手線の駅時刻表') + story('sharing','列車詳細・乗車位置の共有','列車の詳細も。<br>乗車位置の共有も。','行き先、現在位置、停車駅を詳しく確認。乗車位置の共有画面では号車を選び、駅名と乗車位置を伝える準備ができます。共有先は送信前に選べます。','green',['jre-detail.png','jre-share.png'],dark=True,caption='列車詳細と、乗車位置を共有する画面')
+    return story('positions','列車位置','2つの路線の、<br>いまが見える。','駅と駅の間を走る列車を、路線の流れに沿って表示。ブルーライン・グリーンラインを選んで、公開されている列車の位置を確認できます。','blue',['yokohama-route.png'],caption='ブルーラインの列車位置') + story('train-details','列車の詳細','行き先も、<br>停車駅も。','列車を選ぶと、現在の走行位置、行き先、提供される遅延情報や停車駅の時刻を確認できます。','blue',['yokohama-detail.png'],dark=True,caption='ブルーラインの列車詳細') + story('departures','ホーム・発車標','近くの駅の、<br>次の電車へ。','運行情報と、方面ごとの発車時刻をまとめて表示。種別や行き先、提供される遅延情報も、発車前に確認できます。','blue',['yokohama-home.png'],reverse=True,caption='戸塚駅の運行情報と発車標') + story('timetables','駅の時刻表','少し先の予定も、<br>時刻表で。','方面と平日・休日を切り替えて、駅の時刻表を確認。次の一本だけでなく、出発したい時間帯の電車も探せます。','blue',['yokohama-screen.png'],dark=True,caption='戸塚駅の休日時刻表')
 
 def localnav(key, current):
     app=APPS[key]
@@ -61,7 +101,7 @@ def page(path,title,description,body,key=None,noindex=False):
     footer=f'''<footer class="footer"><div class="wrap"><p class="footer-notes">本サイトは{E(CONFIG['developer'])}が開発するアプリの紹介・サポートサイトです。各アプリは非公式であり、鉄道会社・交通事業者およびAppleの公式アプリではありません。<br>列車位置や時刻表の表示には遅れ・誤差が生じる場合があります。最新の情報は駅の案内や各事業者の公式情報をご確認ください。</p><div class="footer-bottom"><span>© 2026 {E(CONFIG['developer'])}</span><div class="footer-links">{link('support/','お問い合わせ')}{link('privacy/','本サイトのプライバシー')}<a href="https://github.com/{E(CONFIG['repository'])}">GitHub</a></div></div></div></footer>'''
     canonical=CONFIG['origin']+url(path)
     doc=f'''<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{E(title)} | {E(CONFIG['title'])}</title><meta name="description" content="{E(description)}"><link rel="canonical" href="{E(canonical)}"><meta property="og:type" content="website"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(description)}"><meta property="og:url" content="{E(canonical)}"><meta name="theme-color" content="#fafafc"><link rel="icon" href="{url('assets/favicon.svg')}" type="image/svg+xml"><link rel="stylesheet" href="{url('assets/site.css')}">{'<meta name="robots" content="noindex">' if noindex else ''}</head><body><a class="skip" href="#main">本文へスキップ</a><header class="global-nav"><nav class="nav-inner" aria-label="メインメニュー"><a class="brand" href="{url()}">Shimayu<span>Apps</span></a><div class="nav-links">{links}</div></nav></header>{localnav(key,path) if key else ''}<main id="main" class="{'theme-'+APPS[key]['color'] if key else ''}">{body}</main>{footer}</body></html>'''
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>{E(title)} | {E(CONFIG['title'])}</title><meta name="description" content="{E(description)}"><link rel="canonical" href="{E(canonical)}"><meta property="og:type" content="website"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(description)}"><meta property="og:url" content="{E(canonical)}"><meta name="theme-color" content="#fafafc"><link rel="icon" href="{url('assets/favicon.svg')}" type="image/svg+xml"><link rel="stylesheet" href="{url('assets/site.css')}">{'<meta name="robots" content="noindex">' if noindex else ''}</head><body><a class="skip" href="#main">本文へスキップ</a><header class="global-nav"><nav class="nav-inner" aria-label="メインメニュー"><a class="brand" href="{url()}">Shimayu<span>Apps</span></a><div class="nav-links">{links}</div></nav></header>{localnav(key,path) if key else ''}<main id="main" class="{'theme-'+APPS[key]['color'] if key else ''}">{body}</main>{footer}</body></html>'''
     target=OUT/(path+'index.html' if not path.endswith('.html') else path)
     target.parent.mkdir(parents=True,exist_ok=True);target.write_text(doc)
     return canonical
@@ -71,14 +111,14 @@ hero=f'''<section class="hero"><p class="eyebrow">Shimayu Apps</p><h1>次の電�
 cards=''
 for key,app in APPS.items():
     headline='路線のいまを、<br>ひと目で。' if key=='jre' else '横浜を走る、<br>あなたの手元で。'
-    cards+=f'''<article class="product-panel panel-{app['color']}"><div class="product-copy"><div class="app-symbol">{TRAIN}</div><p class="device-note">iPhone / Apple Watch</p><h3>{app['name']}</h3><p>{'JR東日本を中心とした列車位置と発車時刻。<br>いつもの路線を、もっと身近に。' if key=='jre' else 'ブルーラインとグリーンライン。<br>列車位置も、駅の時刻表も、すっきり。'}</p>{link(key+'/', 'さらに詳しく','text-link')}</div>{visual(key)}</article>'''
+    cards+=f'''<article class="product-panel panel-{app['color']}"><div class="product-copy"><div class="app-symbol"><img src="{url("assets/"+key+"-icon.png")}" alt="{app["name"]}のアイコン" width="128" height="128"></div><p class="device-note">iPhone / Apple Watch</p><h3>{app['name']}</h3><p>{'JR東日本を中心とした列車位置と発車時刻。<br>いつもの路線を、もっと身近に。' if key=='jre' else 'ブルーラインとグリーンライン。<br>列車位置も、駅の時刻表も、すっきり。'}</p>{link(key+'/', 'さらに詳しく','text-link')}</div>{visual(key, compact=True)}</article>'''
 helpblocks=f'''<section class="help-section wrap"><h2 class="section-heading">使うときも。<br>困ったときも。</h2><div class="help-grid"><div class="help-block"><h3>サポート</h3><p>使い方やよくある質問、不具合の連絡先をまとめました。アプリを選んでご確認ください。</p>{link('jre/support/','JREアプリ ›')}{link('yokohama/support/','横浜地下鉄アプリ ›')}</div><div class="help-block"><h3>プライバシー</h3><p>位置情報や外部サービスとの通信について、アプリごとに説明しています。</p>{link('jre/privacy/','JREアプリ ›')}{link('yokohama/privacy/','横浜地下鉄アプリ ›')}</div></div></section>'''
-urls.append(page('','毎日の移動に、ちょうどいいアプリを。','Shimayuが開発するJREアプリ・横浜地下鉄アプリの紹介、サポート、プライバシーポリシー。',hero+'<section class="products wrap" id="apps"><h2 class="section-heading">あなたの路線に、<br>あなたのアプリを。</h2>'+cards+'</section>'+helpblocks))
+urls.append(page('','毎日の移動に、ちょうどいいアプリを。','Shimayuが開発するJREアプリ・横浜地下鉄アプリの紹介、サポート、プライバシーポリシー。',hero+highlight_cards()+'<section class="products wrap" id="apps"><h2 class="section-heading">あなたの路線に、<br>あなたのアプリを。</h2>'+cards+'</section>'+helpblocks))
 
 for key,app in APPS.items():
     features=''.join(f'<article class="feature-item"><span class="feature-num">0{i+1}</span><h3>{h}</h3><p>{p}</p></article>' for i,(h,p) in enumerate(app['features']))
     coverage=''.join('<li>'+s+'</li>' for s in app['coverage'])
-    body=f'''<section class="hero product-hero"><p class="eyebrow">{app['name']}</p><h1>{app['headline']}</h1><p class="intro">{app['intro']}</p><div class="hero-actions">{link(key+'/support/','使い方・サポート','button')}{link(key+'/privacy/','プライバシーについて','text-link')}</div>{visual(key)}</section>{NOTE}<section class="wrap"><div class="feature-intro"><h2 class="section-heading">{app['section']}</h2><p>{app['body']}</p></div><div class="feature-grid">{features}</div><section class="coverage"><h2>対応する路線・事業者</h2><ul class="line-list">{coverage}</ul><p>{app['coverage_note']}</p></section><section class="coverage"><h2>データ提供について</h2><p>公共交通オープンデータセンター（ODPT）を通じて提供されるデータを利用しています。提供元の更新や通信状況により、情報が遅れる場合があります。本アプリは鉄道会社・交通事業者とは独立して開発されています。</p><p><a href="https://www.odpt.org/">ODPTについて ›</a></p>{'<p>都営地下鉄のデータ提供：東京都交通局・公共交通オープンデータ協議会。対象データのライセンス：<a href="https://creativecommons.org/licenses/by/4.0/deed.ja">CC BY 4.0</a>。列車位置等を表示用に加工しています。</p>' if key=='jre' else ''}</section><section class="availability"><h2>アプリの公開情報</h2><p>App Storeへのリンク・公開版の対応OSは、<br>配信情報が確定し次第、このページでご案内します。</p>{link(key+'/support/','ご質問はこちら','text-link')}</section></section>'''
+    body=f'''<section class="hero product-hero"><img class="app-heading-icon" src="{url("assets/"+key+"-icon.png")}" alt="{app["name"]}のアイコン" width="128" height="128"><p class="eyebrow">{app['name']}</p><h1>{app['headline']}</h1><p class="intro">{app['intro']}</p><div class="hero-actions"><a class="button" href="#positions">機能を見てみる</a>{link(key+'/privacy/','プライバシーについて','text-link')}</div>{visual(key)}</section>{NOTE}<section class="wrap"><div class="feature-intro"><h2 class="section-heading">{app['section']}</h2><p>{app['body']}</p></div></section>{feature_stories(key)}<section class="wrap product-details"><section class="coverage"><h2>対応する路線・事業者</h2><ul class="line-list">{coverage}</ul><p>{app['coverage_note']}</p></section><section class="coverage"><h2>データ提供について</h2><p>公共交通オープンデータセンター（ODPT）を通じて提供されるデータを利用しています。提供元の更新や通信状況により、情報が遅れる場合があります。本アプリは鉄道会社・交通事業者とは独立して開発されています。</p><p><a href="https://www.odpt.org/">ODPTについて ›</a></p>{'<p>都営地下鉄のデータ提供：東京都交通局・公共交通オープンデータ協議会。対象データのライセンス：<a href="https://creativecommons.org/licenses/by/4.0/deed.ja">CC BY 4.0</a>。列車位置等を表示用に加工しています。</p>' if key=='jre' else ''}</section><section class="availability"><h2>アプリの公開情報</h2><p>App Storeへのリンク・公開版の対応OSは、<br>配信情報が確定し次第、このページでご案内します。</p>{link(key+'/support/','ご質問はこちら','text-link')}</section></section>'''
     urls.append(page(key+'/',app['name'],app['description'],body,key))
 
     faqs=[('列車位置が更新されない、または表示されません。','通信状態と、アプリで選んでいる路線をご確認ください。列車位置は提供元の情報を一定間隔で取得しているため、実際の位置と差が生じます。データ未提供の路線・区間や運行時間外には、列車が表示されない場合があります。'),('位置情報の許可は必要ですか？','近くの駅を探す機能で位置情報を利用します。iPhoneの「設定」→「プライバシーとセキュリティ」→「位置情報サービス」から許可を変更できます。駅・路線を手動で選ぶ機能は位置情報を許可せず利用できます。'),('駅の発車時刻と実際の発車時刻が違います。','時刻表・遅延情報の更新状況によって差が生じる場合があります。臨時運行やダイヤ変更がすぐに反映されないこともあります。乗車時は駅の発車標や係員の案内を優先してください。'),('Apple Watchで情報を取得できません。','Watchのインターネット接続を確認し、アプリを開き直してください。位置情報を利用する場合は、Watch側の許可設定も確認してください。改善しない場合は、端末とOS、操作手順を添えてご連絡ください。'),('鉄道会社の公式アプリですか？','いいえ。Shimayuが開発する非公式アプリです。鉄道会社・交通事業者に、本アプリの不具合や操作方法をお問い合わせいただくことはお控えください。')]
@@ -102,7 +142,7 @@ for key,app in APPS.items():
     body=f'<article class="document"><p class="eyebrow">{app["name"]}</p><h1>プライバシーポリシー</h1><p class="lead">利用する情報と、その目的について。</p><p class="updated">制定・最終更新日：{CONFIG["updated"]}</p><nav class="toc" aria-label="目次"><p>目次</p><ol>{toc}</ol></nav>{sectionshtml}<h2>外部サービスの案内</h2>{external}</article>'
     urls.append(page(key+'/privacy/',app['name']+'のプライバシーポリシー',app['name']+'で利用する位置情報、端末保存情報、外部サービスとの通信について。',body,key))
 
-cards=''.join(f'<a class="support-card" href="{url(key+"/support/")}"><h2>{app["name"]}</h2><p>よくあるご質問・お問い合わせ ›</p></a>' for key,app in APPS.items())
+cards=''.join(f'<a class="support-card" href="{url(key+"/support/")}"><img class="support-app-icon" src="{url("assets/"+key+"-icon.png")}" width="64" height="64" alt="{app["name"]}のアイコン"><h2>{app["name"]}</h2><p>よくあるご質問・お問い合わせ ›</p></a>' for key,app in APPS.items())
 body=f'<section class="document"><p class="eyebrow">Shimayu Apps</p><h1>サポート</h1><p class="lead">ご利用のアプリをお選びください。</p><div class="support-chooser">{cards}</div><h2>開発者について</h2><p>開発者：{E(CONFIG["developer"])}<br>アプリに関するお問い合わせは、各アプリのサポートページからご連絡ください。</p><p><a href="https://github.com/Shimayu13">GitHubプロフィール ›</a></p></section>'
 urls.append(page('support/','サポート','JREアプリ・横浜地下鉄アプリのサポート窓口。',body))
 body=f'''<article class="document"><p class="eyebrow">Shimayu Apps</p><h1>本サイトのプライバシー</h1><p class="lead">このWebサイトをご覧いただくときの情報の取り扱いです。<br>アプリのポリシーは、各アプリのページをご覧ください。</p><h2>サイトの配信</h2><p>本サイトはGitHub Pagesを利用した静的サイトです。独自のアクセス解析、広告、問い合わせフォーム、利用者アカウント機能は設けていません。閲覧者情報を保存する独自のCookieやローカルストレージは使用しません。外部フォントや外部スクリプトの読み込みも行いません。</p><h2>GitHubによる情報の処理</h2><p>ページの配信と安全な運用のため、GitHubがIPアドレスなどの通信情報を取り扱います。詳細は<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHubのプライバシーステートメント</a>をご確認ください。</p><h2>お問い合わせ</h2><p>GitHub Issuesへの投稿は公開されます。個人情報を投稿しないでください。投稿内容は問い合わせへの対応に利用します。{link('support/','サポート窓口')}をご利用ください。</p><h2>アプリのプライバシーポリシー</h2><ul><li>{link('jre/privacy/','JREアプリ')}</li><li>{link('yokohama/privacy/','横浜地下鉄アプリ')}</li></ul><p class="updated">開発者：{E(CONFIG['developer'])}<br>最終更新日：{CONFIG['updated']}</p></article>'''

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Verify deployment paths, page metadata, anchor targets and publication scope."""
 import json
+import hashlib
 import re
 from html.parser import HTMLParser
 from pathlib import Path
@@ -14,13 +15,16 @@ config=json.loads((ROOT/'content/site.json').read_text())
 base=config['base_path'].rstrip('/')
 class Document(HTMLParser):
     def __init__(self,text):
-        super().__init__();self.ids=set();self.refs=[];self.h1=0;self.title=False;self.lang=False;self.description=False;self.scripts=0;self.feed(text)
+        super().__init__();self.ids=set();self.refs=[];self.h1=0;self.title=False;self.lang=False;self.description=False;self.scripts=0;self.phones=0;self.islands=0;self.feed(text)
     def handle_starttag(self,tag,attrs):
         attrs=dict(attrs)
+        classes=attrs.get("class", "").split()
+        self.phones += "real-screen" in classes
+        self.islands += "dynamic-island" in classes
         if 'id' in attrs:
             assert attrs['id'] not in self.ids, f'Duplicate id: {attrs["id"]}'
             self.ids.add(attrs['id'])
-        for key in ('href','src'):
+        for key in ('href','src','srcset'):
             if key in attrs:self.refs.append(attrs[key])
         self.h1+=tag=='h1';self.title|=tag=='title';self.scripts+=tag=='script'
         self.lang|=tag=='html' and attrs.get('lang')=='ja'
@@ -32,6 +36,7 @@ count=0
 for path,doc in docs.items():
     assert doc.h1==1 and doc.title and doc.lang and doc.description, f'Incomplete metadata: {path}'
     assert doc.scripts==0, 'This site must work without scripts or trackers'
+    assert doc.phones==doc.islands, f'Missing Dynamic Island in {path}'
     for ref in doc.refs:
         parsed=urlsplit(ref)
         assert ref and ref!='#',f'Empty link in {path}'
@@ -57,4 +62,12 @@ for path in OUT.rglob('*'):
     if path.is_file() and path.suffix in ('.html','.css','.svg','.json','.txt','.xml'):
         text=path.read_text()
         assert not re.search(r'(?:gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN .*PRIVATE KEY|acl:consumerKey=|X-RapidAPI-Key)',text),f'Credential marker: {path}'
+appearances=json.loads((ROOT/'content/appearances.json').read_text())
+for modes in appearances.values():
+    assert set(modes)=={'light','dark'}
+    for filename in modes.values(): assert (OUT/'assets'/filename).is_file()
+for name in ('screenshots.json','icons.json'):
+    for item in json.loads((ROOT/'content'/name).read_text()):
+        asset=OUT/item['file']
+        assert hashlib.sha256(asset.read_bytes()).hexdigest()==item['sha256'], f'Changed source image: {asset}'
 print(f'PASS: {len(docs)} pages, {count} local links/assets/anchors, App Store URL registry, sitemap and publication scope.')

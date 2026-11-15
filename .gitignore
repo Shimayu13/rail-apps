@@ -5,3 +5,4 @@ __pycache__/
 preview-*.jpg
 .DS_Store
 preview/
+preview-*/

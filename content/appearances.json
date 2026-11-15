@@ -1,0 +1,38 @@
+{
+  "jre-screen.png": {
+    "light": "jre-screen.png",
+    "dark": "jre-route-dark.png"
+  },
+  "jre-home.png": {
+    "light": "jre-home-light.png",
+    "dark": "jre-home-dark.png"
+  },
+  "jre-detail.png": {
+    "light": "jre-detail-light.png",
+    "dark": "jre-detail-dark.png"
+  },
+  "jre-share.png": {
+    "light": "jre-share-light.png",
+    "dark": "jre-share-dark.png"
+  },
+  "jre-timetable.png": {
+    "light": "jre-timetable-light.png",
+    "dark": "jre-timetable-dark.png"
+  },
+  "yokohama-route.png": {
+    "light": "yokohama-route-light.png",
+    "dark": "yokohama-route-dark.png"
+  },
+  "yokohama-home.png": {
+    "light": "yokohama-home-light.png",
+    "dark": "yokohama-home-dark.png"
+  },
+  "yokohama-detail.png": {
+    "light": "yokohama-detail-light.png",
+    "dark": "yokohama-detail-dark.png"
+  },
+  "yokohama-screen.png": {
+    "light": "yokohama-timetable-light.png",
+    "dark": "yokohama-timetable-dark.png"
+  }
+}
