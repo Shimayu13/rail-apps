@@ -27,7 +27,7 @@ python3 tools/check.py
 - `assets/site.css`: レイアウトとレスポンシブ表示。
 - `dist/`: 公開用生成物。Git管理せず、Actionsで生成。
 
-トップ、2アプリの紹介・サポート・ポリシー、共通サポート、Webサイトのプライバシー、404の計10ページを生成します。JavaScript、外部フォント、解析・広告スクリプト、Cookie、サーバー処理は使用しません。FAQはHTML標準のdetails要素で動作します。
+トップ、2アプリの紹介・サポート・ポリシー、共通サポート、Webサイトのプライバシー、404の計10ページを言語ごとに生成します（日本語・英語で計20ページ）。JavaScript、外部フォント、解析・広告スクリプト、Cookie、サーバー処理は使用しません。FAQはHTML標準のdetails要素で動作します。
 
 ## プレビュー
 
@@ -65,3 +65,9 @@ mainにpushすると `.github/workflows/pages.yml` がビルド・リンク検�
 サイトの配色は `prefers-color-scheme` により端末のライト／ダーク設定に追従します。スクリーンショットも `picture` 要素で端末設定に合う元画像を選びます。画像自体の配色は改変しません。拡大リンクも表示中のモードと同じ画像を開きます。
 
 `content/appearances.json` に9種類の画面のライト／ダーク画像の対応を定義しています。追加の17枚をそのまま利用し、JRE列車位置のライト版には既存のシミュレータ撮影を利用しています。
+
+## English website
+
+English pages live under `/en/` (https://shimayu13.github.io/rail-apps/en/). Every page has a link to its counterpart in the other language. Japanese URLs and App Store Connect registration URLs remain unchanged. Both languages use the same original screenshots, app icons and light/dark appearance settings. Screenshots show the Japanese app interface.
+
+`tools/english.py` contains reviewed English copy and generates the English pages from the shared layout. Builds fail on missing translations; `tools/check.py` checks all 20 pages, language metadata and language links. When Japanese copy changes, update its English translation in the same change.

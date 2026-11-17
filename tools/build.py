@@ -154,6 +154,8 @@ for asset in (ROOT/'assets').iterdir():
 (OUT/'assets/favicon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#1d1d1f"/><path d="M42 20H27c-10 0-10 12 0 12h10c10 0 10 12 0 12H22" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/></svg>')
 (OUT/'.nojekyll').touch()
 (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+CONFIG['origin']+url('sitemap.xml')+'\n')
+from english import generate
+urls.extend(generate(OUT, BASE, CONFIG['origin']))
 (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+E(u)+'</loc></url>' for u in urls)+'</urlset>')
 (OUT/'app-store-urls.json').write_text(json.dumps({key:{'marketing_url':CONFIG['origin']+url(key+'/'),'support_url':CONFIG['origin']+url(key+'/support/'),'privacy_policy_url':CONFIG['origin']+url(key+'/privacy/')} for key in APPS},ensure_ascii=False,indent=2)+'\n')
-print(f'Built {len(urls)+1} pages into {OUT}, base path: {BASE or "/"}')
+print(f'Built {len(list(OUT.rglob("*.html")))} pages into {OUT}, base path: {BASE or "/"}')

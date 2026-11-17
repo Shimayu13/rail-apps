@@ -15,7 +15,7 @@ config=json.loads((ROOT/'content/site.json').read_text())
 base=config['base_path'].rstrip('/')
 class Document(HTMLParser):
     def __init__(self,text):
-        super().__init__();self.ids=set();self.refs=[];self.h1=0;self.title=False;self.lang=False;self.description=False;self.scripts=0;self.phones=0;self.islands=0;self.feed(text)
+        super().__init__();self.ids=set();self.refs=[];self.h1=0;self.title=False;self.lang=False;self.description=False;self.scripts=0;self.phones=0;self.islands=0;self.language=None;self.alternates={};self.canonical=None;self.japanese=[];self.feed(text)
     def handle_starttag(self,tag,attrs):
         attrs=dict(attrs)
         classes=attrs.get("class", "").split()
@@ -27,14 +27,26 @@ class Document(HTMLParser):
         for key in ('href','src','srcset'):
             if key in attrs:self.refs.append(attrs[key])
         self.h1+=tag=='h1';self.title|=tag=='title';self.scripts+=tag=='script'
-        self.lang|=tag=='html' and attrs.get('lang')=='ja'
+        if tag=='html':self.language=attrs.get('lang')
+        self.lang|=tag=='html' and attrs.get('lang') in ('ja','en')
+        if tag=='link' and attrs.get('rel')=='alternate':self.alternates[attrs['hreflang']]=attrs['href']
+        if tag=='link' and attrs.get('rel')=='canonical':self.canonical=attrs['href']
         self.description|=tag=='meta' and attrs.get('name')=='description' and bool(attrs.get('content'))
 
+    def handle_data(self,data):
+        if re.search('[ぁ-龯]',data):self.japanese.append(data)
+
 docs={p:Document(p.read_text()) for p in OUT.rglob('*.html')}
-assert len(docs)==10, f'Expected 10 pages, found {len(docs)}'
+assert len(docs)==20, f'Expected 20 pages, found {len(docs)}'
 count=0
 for path,doc in docs.items():
     assert doc.h1==1 and doc.title and doc.lang and doc.description, f'Incomplete metadata: {path}'
+    relative=path.relative_to(OUT)
+    english=relative.parts[0]=='en'
+    assert doc.language==('en' if english else 'ja'),f'Wrong language: {path}'
+    assert set(doc.alternates)=={'ja','en','x-default'},f'Missing alternate language: {path}'
+    assert doc.canonical==doc.alternates[doc.language],f'Wrong canonical: {path}'
+    if english:assert doc.japanese==['日本語'],f'Untranslated text: {path}: {doc.japanese}'
     assert doc.scripts==0, 'This site must work without scripts or trackers'
     assert doc.phones==doc.islands, f'Missing Dynamic Island in {path}'
     for ref in doc.refs:

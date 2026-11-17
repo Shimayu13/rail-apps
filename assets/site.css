@@ -12,3 +12,10 @@
 html{scroll-behavior:auto}
 html{scroll-padding-top:74px}.story{scroll-margin-top:0}@media(max-width:720px){.story-copy h2,.story-pair .story-copy h2{font-size:36px}}@media(max-width:370px){.story-copy h2,.story-pair .story-copy h2{font-size:32px}}
 .phone picture{display:block}.screen-zoom{position:absolute;inset:0;z-index:2;border-radius:inherit}.screen-zoom:focus-visible{outline:4px solid #2997ff;outline-offset:-4px}.mode-dark{display:none}.mode-light{display:block}@media(prefers-color-scheme:dark){.mode-dark{display:block}.mode-light{display:none}}
+
+/* Language links remain available on narrow screens. */
+.language-switch{white-space:nowrap}
+html[lang=en] .hero h1,html[lang=en] .section-heading,html[lang=en] .story-copy h2{letter-spacing:-.045em}
+html[lang=en] .local-nav .wrap{gap:12px}
+@media(max-width:600px){.nav-links{gap:14px}.nav-inner{padding:0 16px;gap:10px}html[lang=en] .nav-links a{font-size:11px}html[lang=en] .local-nav .wrap{flex-wrap:wrap;padding-top:12px;padding-bottom:12px}html[lang=en] .local-nav strong{font-size:17px}html[lang=en] .local-nav-links{gap:16px}html[lang=en] .hero h1{font-size:42px}html[lang=en] .story-copy h2{font-size:36px}}
+@media(max-width:370px){.nav-inner{padding:0 12px}.nav-links{gap:10px}.brand{font-size:14px}html[lang=en] .nav-links a{font-size:10px}}
