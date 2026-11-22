@@ -271,7 +271,7 @@ class English(HTMLParser):
     def handle_data(self,d):self.parts.append(html.escape(translate(d)))
 
 def generate(out,base,origin):
-    originals=list(out.rglob('*.html'))
+    originals=sorted(out.rglob('*.html'))
     english_urls=[]
     for source in originals:
         if 'en' in source.relative_to(out).parts:continue
