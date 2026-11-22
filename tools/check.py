@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Verify deployment paths, page metadata, anchor targets and publication scope."""
+import argparse
 import json
 import hashlib
 import re
@@ -10,9 +11,15 @@ from urllib.parse import unquote, urlsplit
 import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'dist'
 config=json.loads((ROOT/'content/site.json').read_text())
-base=config['base_path'].rstrip('/')
+parser=argparse.ArgumentParser()
+parser.add_argument('--base',default=config['base_path'])
+parser.add_argument('--origin',default=config['origin'])
+parser.add_argument('--output',default='dist')
+args=parser.parse_args()
+OUT=ROOT/args.output
+config['origin']=args.origin.rstrip('/')
+base=args.base.rstrip('/')
 class Document(HTMLParser):
     def __init__(self,text):
         super().__init__();self.ids=set();self.refs=[];self.h1=0;self.title=False;self.lang=False;self.description=False;self.scripts=0;self.phones=0;self.islands=0;self.language=None;self.alternates={};self.canonical=None;self.japanese=[];self.feed(text)

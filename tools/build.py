@@ -12,7 +12,10 @@ CONFIG = json.loads((ROOT / 'content/site.json').read_text())
 parser = argparse.ArgumentParser()
 parser.add_argument('--base', default=CONFIG['base_path'])
 parser.add_argument('--output', default='dist')
+parser.add_argument('--origin', default=CONFIG['origin'])
+parser.add_argument('--hosting', choices=('github', 'vercel'), default='github')
 args = parser.parse_args()
+CONFIG['origin'] = args.origin.rstrip('/')
 BASE = args.base.rstrip('/')
 OUT = ROOT / args.output
 OUT.mkdir(parents=True, exist_ok=True)
@@ -146,6 +149,8 @@ cards=''.join(f'<a class="support-card" href="{url(key+"/support/")}"><img class
 body=f'<section class="document"><p class="eyebrow">Shimayu Apps</p><h1>サポート</h1><p class="lead">ご利用のアプリをお選びください。</p><div class="support-chooser">{cards}</div><h2>開発者について</h2><p>開発者：{E(CONFIG["developer"])}<br>アプリに関するお問い合わせは、各アプリのサポートページからご連絡ください。</p><p><a href="https://github.com/Shimayu13">GitHubプロフィール ›</a></p></section>'
 urls.append(page('support/','サポート','JREアプリ・横浜地下鉄アプリのサポート窓口。',body))
 body=f'''<article class="document"><p class="eyebrow">Shimayu Apps</p><h1>本サイトのプライバシー</h1><p class="lead">このWebサイトをご覧いただくときの情報の取り扱いです。<br>アプリのポリシーは、各アプリのページをご覧ください。</p><h2>サイトの配信</h2><p>本サイトはGitHub Pagesを利用した静的サイトです。独自のアクセス解析、広告、問い合わせフォーム、利用者アカウント機能は設けていません。閲覧者情報を保存する独自のCookieやローカルストレージは使用しません。外部フォントや外部スクリプトの読み込みも行いません。</p><h2>GitHubによる情報の処理</h2><p>ページの配信と安全な運用のため、GitHubがIPアドレスなどの通信情報を取り扱います。詳細は<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHubのプライバシーステートメント</a>をご確認ください。</p><h2>お問い合わせ</h2><p>GitHub Issuesへの投稿は公開されます。個人情報を投稿しないでください。投稿内容は問い合わせへの対応に利用します。{link('support/','サポート窓口')}をご利用ください。</p><h2>アプリのプライバシーポリシー</h2><ul><li>{link('jre/privacy/','JREアプリ')}</li><li>{link('yokohama/privacy/','横浜地下鉄アプリ')}</li></ul><p class="updated">開発者：{E(CONFIG['developer'])}<br>最終更新日：{CONFIG['updated']}</p></article>'''
+if args.hosting == 'vercel':
+    body=body.replace('本サイトはGitHub Pagesを利用した静的サイトです。', '本サイトはVercelを利用した静的サイトです。').replace('GitHubによる情報の処理', 'Vercelによる情報の処理').replace('ページの配信と安全な運用のため、GitHubがIPアドレスなどの通信情報を取り扱います。詳細は', 'ページの配信と安全な運用のため、VercelがIPアドレスなどの通信情報を取り扱います。詳細は').replace('https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement', 'https://vercel.com/legal/privacy-policy').replace('GitHubのプライバシーステートメント', 'Vercelのプライバシーポリシー')
 urls.append(page('privacy/','本サイトのプライバシー','Shimayu AppsのWebサイトのプライバシーに関する説明。',body))
 page('404.html','ページが見つかりません','お探しのページは見つかりませんでした。','<section class="error-page"><p class="eyebrow">お探しのページが見つかりません</p><h1>次の目的地へ。</h1><p>URLが変更されたか、ページが存在しない可能性があります。</p>'+link('','トップページへ','button')+'</section>',noindex=True)
 (OUT/'assets').mkdir(exist_ok=True)

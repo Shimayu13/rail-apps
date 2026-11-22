@@ -71,3 +71,27 @@ mainにpushすると `.github/workflows/pages.yml` がビルド・リンク検�
 English pages live under `/en/` (https://shimayu13.github.io/rail-apps/en/). Every page has a link to its counterpart in the other language. Japanese URLs and App Store Connect registration URLs remain unchanged. Both languages use the same original screenshots, app icons and light/dark appearance settings. Screenshots show the Japanese app interface.
 
 `tools/english.py` contains reviewed English copy and generates the English pages from the shared layout. Builds fail on missing translations; `tools/check.py` checks all 20 pages, language metadata and language links. When Japanese copy changes, update its English translation in the same change.
+
+## Vercelでの公開
+
+`index.html` はビルド時に `dist/index.html` として生成します。ソースのルートに手書きのHTMLを置く必要はありません。Git管理対象外の `dist/` をそのままリポジトリから探す設定では表示できません。
+
+`Shimayu13/rail-apps` をインポートし、次の設定でデプロイしてください。
+
+- Root Directory: リポジトリ直下（空欄または `.`）。`dist` やアプリ側の旧コピーを指定しないでください。
+- Framework Preset: Other
+- Build Command: `python3 tools/build_vercel.py`
+- Output Directory: `dist`
+- Install Command: 空欄（外部依存なし）
+
+ビルドコマンドと出力先はルートの `vercel.json` でも指定しています。既存のプロジェクトは最新コミットを再デプロイしてください。Vercelのシステム環境変数を有効にしてください。独自ドメインを明示する場合は `SITE_ORIGIN=https://your-domain.example` を設定できます。
+
+Vercelでは `/` を起点に日本語・英語の20ページを生成します。画像や言語切り替えにGitHub Pages用の `/rail-apps` は付けません。canonical・サイトマップも本番ドメインに合わせ、WebサイトのプライバシーページにはVercelの配信について記載します。ビルド後にリンクと画像を自動検証します。
+
+ローカルでVercel用生成を確認する例:
+
+```sh
+SITE_ORIGIN=https://rail-apps.example python3 tools/build_vercel.py
+```
+
+GitHub Pagesは既存の `python3 tools/build.py` と `python3 tools/check.py` を使用します。

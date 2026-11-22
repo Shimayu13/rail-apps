@@ -232,6 +232,13 @@ for jp,en in SCREENS.items():
     COPY[jp+'の実際のアプリ画面']=en+' screenshot (Japanese interface)'
     for mode,label in [('ライト','light'),('ダーク','dark')]:COPY[jp+'の'+mode+'画面を拡大する']='Enlarge '+en+' — '+label+' mode'
 
+COPY['Vercelによる情報の処理']='Information processed by Vercel'
+COPY['Vercelのプライバシーポリシー']='Vercel Privacy Policy'
+COPY['ページの配信と安全な運用のため、VercelがIPアドレスなどの通信情報を取り扱います。詳細は']='Vercel processes connection information, including IP addresses, to deliver pages and operate the service securely. See the '
+for source,target in list(COPY.items()):
+    if '本サイトはGitHub Pagesを利用した静的サイトです。' in source:
+        COPY[source.replace('GitHub Pages','Vercel')]=target.replace('GitHub Pages','Vercel')
+
 def translate(value):
     if value in COPY:return COPY[value]
     if not re.search('[ぁ-龯]',value):return value
