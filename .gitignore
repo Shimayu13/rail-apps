@@ -1,4 +1,3 @@
-dist/
 .preview-root/
 __pycache__/
 *.pyc

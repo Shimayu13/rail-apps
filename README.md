@@ -25,7 +25,7 @@ python3 tools/check.py
 - `content/site.json`: 開発者名、公開先、問い合わせ用メール（初期値は空）。
 - `tools/build.py`: 紹介文、FAQ、プライバシーポリシー、共通HTML。
 - `assets/site.css`: レイアウトとレスポンシブ表示。
-- `dist/`: 公開用生成物。Git管理せず、Actionsで生成。
+- `dist/`: HTML・CSS・画像を含む公開用生成物。GitHubでも完成したファイルを確認できるようGit管理しています。ソース変更後はビルドして、生成物も一緒にコミットします。
 
 トップ、2アプリの紹介・サポート・ポリシー、共通サポート、Webサイトのプライバシー、404の計10ページを言語ごとに生成します（日本語・英語で計20ページ）。JavaScript、外部フォント、解析・広告スクリプト、Cookie、サーバー処理は使用しません。FAQはHTML標準のdetails要素で動作します。
 
@@ -74,7 +74,7 @@ English pages live under `/en/` (https://shimayu13.github.io/rail-apps/en/). Eve
 
 ## Vercelでの公開
 
-`index.html` はビルド時に `dist/index.html` として生成します。ソースのルートに手書きのHTMLを置く必要はありません。Git管理対象外の `dist/` をそのままリポジトリから探す設定では表示できません。
+`index.html` はビルド時に `dist/index.html` として生成します。ソースのルートに手書きのHTMLを置く必要はありません。生成済みの `dist/` もGitHubへ登録しています。`dist/index.html` が日本語トップ、`dist/en/index.html` が英語トップです。Vercelでは配信先に合わせて再生成するため、以下の設定を使用してください。
 
 `Shimayu13/rail-apps` をインポートし、次の設定でデプロイしてください。
 
@@ -95,3 +95,7 @@ SITE_ORIGIN=https://rail-apps.example python3 tools/build_vercel.py
 ```
 
 GitHub Pagesは既存の `python3 tools/build.py` と `python3 tools/check.py` を使用します。
+
+## 生成済みファイルの更新
+
+ソースの編集後は `python3 tools/build.py` と `python3 tools/check.py` を実行し、変更したソースと `dist/` の両方をコミットしてください。GitHub Actionsでも再生成し、コミット済み生成物との差分を確認します。Vercel用ビルド後にコミットする場合は、先に通常の `tools/build.py` でGitHub Pages用の生成物に戻してください。

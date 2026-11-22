@@ -22,6 +22,8 @@ jobs:
         run: python3 tools/build.py
       - name: Check pages and internal links
         run: python3 tools/check.py
+      - name: Check committed static files are current
+        run: git diff --exit-code -- dist
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

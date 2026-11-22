@@ -1,0 +1,12 @@
+{
+  "jre": {
+    "marketing_url": "https://shimayu13.github.io/rail-apps/jre/",
+    "support_url": "https://shimayu13.github.io/rail-apps/jre/support/",
+    "privacy_policy_url": "https://shimayu13.github.io/rail-apps/jre/privacy/"
+  },
+  "yokohama": {
+    "marketing_url": "https://shimayu13.github.io/rail-apps/yokohama/",
+    "support_url": "https://shimayu13.github.io/rail-apps/yokohama/support/",
+    "privacy_policy_url": "https://shimayu13.github.io/rail-apps/yokohama/privacy/"
+  }
+}
